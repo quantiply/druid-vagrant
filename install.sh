@@ -1,7 +1,7 @@
 #! /bin/bash -e
 
 apt-get update
-apt-get install -y supervisor vim less net-tools inetutils-ping curl git telnet nmap socat dnsutils netcat software-properties-common
+apt-get install -y supervisor vim less net-tools inetutils-ping curl git telnet nmap socat dnsutils netcat software-properties-common maven
 add-apt-repository -y ppa:webupd8team/java
 apt-get update
 echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
@@ -18,6 +18,14 @@ wget --quiet http://static.druid.io/artifacts/releases/druid-services-0.6.160-bi
   cp -r /vagrant/config druid-services/config &&\
   chown -R vagrant:vagrant druid-services 
 
+fi
+
+echo "Installing Druid plugins."
+if [ ! -d "druid-src" ]; then
+    git clone https://github.com/metamx/druid.git druid-src
+    cd druid-src
+    git checkout tags/druid-0.6.160
+    mvn install -DskipTests
 fi
 
 echo "Installing Zookeeper."
