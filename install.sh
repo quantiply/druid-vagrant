@@ -26,6 +26,7 @@ if [ ! -d "druid-src" ]; then
     cd druid-src
     git checkout tags/druid-0.6.160
     mvn install -DskipTests
+    cd -
 fi
 
 echo "Installing Zookeeper."

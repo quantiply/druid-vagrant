@@ -1,0 +1,10 @@
+{
+    "queryType": "timeseries",
+    "dataSource": "investor-demo",
+    "granularity": "all",
+    "dimensions": [],
+    "aggregations": [
+        {"type": "count", "name": "count"}
+    ],
+    "intervals": ["2015-01-01T00:00/2020-01-01T00"]
+}

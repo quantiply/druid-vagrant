@@ -1,0 +1,11 @@
+{
+    "queryType": "groupBy",
+    "dataSource": "wikipedia",
+    "granularity": "all",
+    "dimensions": ["namespace"],
+    "aggregations": [
+        {"type": "longSum", "name": "edit_count", "fieldName": "count"},
+        {"type": "doubleSum", "name": "chars_added", "fieldName": "added"}
+    ],
+    "intervals": ["2010-01-01T00:00/2020-01-01T00"]
+}
