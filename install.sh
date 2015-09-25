@@ -57,5 +57,5 @@ echo "Configure services."
 mkdir -p /var/log/{zookeeper,druid} && \
 chown -R vagrant:vagrant /var/log/{zookeeper,druid}
 service supervisor restart
-cp /vagrant/overlord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+cp /vagrant/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 supervisorctl reload
