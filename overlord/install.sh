@@ -44,9 +44,12 @@ else
   echo "Existing db. root password is not changed."
 fi
 
+cp mysql/my.cnf /etc/mysql/my.cnf
+/etc/init.d/mysql restart
+
 cat <<EOF | mysql -u root --password=$DB_PASSWORD
 create database if not exists druid default charset utf8 COLLATE utf8_general_ci;
-GRANT ALL PRIVILEGES ON druid.* TO 'druid'@'localhost' IDENTIFIED BY 'diurd';
+GRANT ALL PRIVILEGES ON druid.* TO 'druid'@'%' IDENTIFIED BY 'diurd';
 FLUSH PRIVILEGES;
 EOF
 
@@ -54,5 +57,5 @@ echo "Configure services."
 mkdir -p /var/log/{zookeeper,druid} && \
 chown -R vagrant:vagrant /var/log/{zookeeper,druid}
 service supervisor restart
-cp /vagrant/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+cp /vagrant/overlord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 supervisorctl reload
