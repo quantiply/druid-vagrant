@@ -11,22 +11,15 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y oracle-java7-installer oracle-
 echo "Installing Druid."
 if [ ! -d "druid-services" ]; then
 
-wget --quiet http://static.druid.io/artifacts/releases/druid-services-0.6.160-bin.tar.gz && \
-  tar -zxf druid-services-*.gz && \
-  mv druid-services-0.6.160 druid-services &&\
-  mv druid-services/config druid-services/config.orig &&\
-  cp -r /vagrant/config druid-services/config &&\
-  chown -R vagrant:vagrant druid-services 
+wget http://central.maven.org/maven2/org/fusesource/sigar/1.6.4/sigar-1.6.4.jar && \
+  mv sigar-1.6.4.jar lib
 
-fi
-
-echo "Installing Druid plugins."
-if [ ! -d "druid-src" ]; then
-    git clone https://github.com/metamx/druid.git druid-src
-    cd druid-src
-    git checkout tags/druid-0.6.160
-    mvn install -DskipTests
-    cd -
+wget --quiet http://static.druid.io/artifacts/releases/druid-0.8.1-bin.tar.gz && \
+  tar -zxf druid-*.gz && \
+  mv druid-0.8.1 druid &&\
+  mv druid/config druid/config.orig &&\
+  cp -r /vagrant/config druid/config &&\
+  chown -R vagrant:vagrant druid
 fi
 
 echo "Installing Zookeeper."
