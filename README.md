@@ -9,8 +9,25 @@ http://192.168.50.4:8080/console.html
 You can hit the coordinator on:
 http://192.168.50.4:8081/
 
-More Information
+Control
 ---
+
+If you need to bounce things, use:
+
+```
+sudo service supervisor stop
+sudo service supervisor start
+```
+
+You may also need to kick mysqld:
+
+```
+/etc/init.d/mysqld restart
+```
+
+
+
+
 
 
 Druid Docs
