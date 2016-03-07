@@ -27,9 +27,9 @@ echo "Installing Zookeeper."
 
 if [ ! -d "zookeeper" ]; then
 
-wget --quiet http://mirrors.ibiblio.org/apache/zookeeper/zookeeper-3.4.7/zookeeper-3.4.7.tar.gz && \
+wget --quiet http://mirrors.ibiblio.org/apache/zookeeper/zookeeper-3.4.8/zookeeper-3.4.8.tar.gz && \
   tar xzf zookeeper-*.tar.gz && \
-  mv zookeeper-3.4.7 zookeeper && \
+  mv zookeeper-3.4.8 zookeeper && \
   cp zookeeper/conf/zoo_sample.cfg zookeeper/conf/zoo.cfg &&\
   chown -R vagrant:vagrant zookeeper
 fi
