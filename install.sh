@@ -11,31 +11,25 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y oracle-java7-installer oracle-
 echo "Installing Druid."
 if [ ! -d "druid-services" ]; then
 
-wget --quiet http://static.druid.io/artifacts/releases/druid-services-0.6.160-bin.tar.gz && \
-  tar -zxf druid-services-*.gz && \
-  mv druid-services-0.6.160 druid-services &&\
-  mv druid-services/config druid-services/config.orig &&\
-  cp -r /vagrant/config druid-services/config &&\
-  chown -R vagrant:vagrant druid-services 
+wget --quiet http://static.druid.io/artifacts/releases/druid-0.8.1-bin.tar.gz && \
+  tar -zxf druid-*.gz && \
+  mv druid-0.8.1 druid &&\
+  mv druid/config druid/config.orig &&\
+  cp -r /vagrant/config druid/config &&\
+  chown -R vagrant:vagrant druid
 
-fi
+wget http://central.maven.org/maven2/org/fusesource/sigar/1.6.4/sigar-1.6.4.jar && \
+  mv sigar-1.6.4.jar druid/lib/
 
-echo "Installing Druid plugins."
-if [ ! -d "druid-src" ]; then
-    git clone https://github.com/metamx/druid.git druid-src
-    cd druid-src
-    git checkout tags/druid-0.6.160
-    mvn install -DskipTests
-    cd -
 fi
 
 echo "Installing Zookeeper."
 
 if [ ! -d "zookeeper" ]; then
 
-wget --quiet http://mirrors.ibiblio.org/apache/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz && \
+wget --quiet http://mirrors.ibiblio.org/apache/zookeeper/zookeeper-3.4.8/zookeeper-3.4.8.tar.gz && \
   tar xzf zookeeper-*.tar.gz && \
-  mv zookeeper-3.4.6 zookeeper && \
+  mv zookeeper-3.4.8 zookeeper && \
   cp zookeeper/conf/zoo_sample.cfg zookeeper/conf/zoo.cfg &&\
   chown -R vagrant:vagrant zookeeper
 fi
@@ -50,9 +44,12 @@ else
   echo "Existing db. root password is not changed."
 fi
 
+cp /vagrant/mysql/my.cnf /etc/mysql/my.cnf
+/etc/init.d/mysql restart
+
 cat <<EOF | mysql -u root --password=$DB_PASSWORD
 create database if not exists druid default charset utf8 COLLATE utf8_general_ci;
-GRANT ALL PRIVILEGES ON druid.* TO 'druid'@'localhost' IDENTIFIED BY 'diurd';
+GRANT ALL PRIVILEGES ON druid.* TO 'druid'@'%' IDENTIFIED BY 'diurd';
 FLUSH PRIVILEGES;
 EOF
 
@@ -60,5 +57,5 @@ echo "Configure services."
 mkdir -p /var/log/{zookeeper,druid} && \
 chown -R vagrant:vagrant /var/log/{zookeeper,druid}
 service supervisor restart
-cp /vagrant/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+cp /vagrant/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 supervisorctl reload
